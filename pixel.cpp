@@ -11,3 +11,7 @@ PixelDouble::PixelDouble(uint8_t red, uint8_t green, uint8_t blue)
       green(static_cast<double>(green) / UINT8_MAX),
       blue(static_cast<double>(blue) / UINT8_MAX) {
 }
+
+std::ostream& operator<<(std::ostream& os, const PixelDouble& pixel) {
+    return os << pixel.red << ' ' << pixel.green << ' ' << pixel.blue;
+}
