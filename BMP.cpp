@@ -49,9 +49,9 @@ Image BMP::GetImage() const {
     for (size_t row = 0; row < image.GetHeight(); row++) {
         for (size_t pixel_in_row = 0; pixel_in_row < image.GetWidth(); ++pixel_in_row) {
             image.At(pixel_in_row, row) =
-                PixelDouble(data_[pixel_array_offset + row * row_size + pixel_in_row * 3],
+                PixelDouble(data_[pixel_array_offset + row * row_size + pixel_in_row * 3 + 2],
                             data_[pixel_array_offset + row * row_size + pixel_in_row * 3 + 1],
-                            data_[pixel_array_offset + row * row_size + pixel_in_row * 3 + 2]);
+                            data_[pixel_array_offset + row * row_size + pixel_in_row * 3]);
         }
     }
     return image;
