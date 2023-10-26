@@ -1,14 +1,12 @@
 #include "image.hpp"
-#include <iostream>
-#include "pixel.hpp"
 
 Image::Image(size_t width, size_t height) : width_(width), height_(height), pixels_(width_ * height_) {
 }
 
-const size_t Image::Width() const {
+const size_t Image::GetWidth() const {
     return width_;
 }
-const size_t Image::Height() const {
+const size_t Image::GetHeight() const {
     return height_;
 }
 

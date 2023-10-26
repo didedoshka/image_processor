@@ -2,7 +2,6 @@
 
 #include <vector>
 #include "pixel.hpp"
-#include "BMP.hpp"
 
 class Image {
 private:
@@ -12,10 +11,9 @@ private:
 
 public:
     Image(size_t width, size_t height);
-    explicit Image(const BMP& bmp);
 
-    const size_t Width() const;
-    const size_t Height() const;
+    const size_t GetWidth() const;
+    const size_t GetHeight() const;
 
     PixelDouble& At(size_t x, size_t y);
     const PixelDouble& At(size_t x, size_t y) const;

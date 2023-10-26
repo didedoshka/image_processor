@@ -15,8 +15,8 @@ TEST_CASE("Pixel") {
 TEST_CASE("EmptyImage") {
     Image img(100, 100);
 
-    REQUIRE(img.Width() == 100);
-    REQUIRE(img.Height() == 100);
+    REQUIRE(img.GetWidth() == 100);
+    REQUIRE(img.GetHeight() == 100);
 
     PixelDouble gray(0.5, 0.5, 0.5);
 
@@ -30,7 +30,15 @@ TEST_CASE("EmptyImage") {
 }
 
 TEST_CASE("BMPInput") {
-    BMP bmp("flag.bmp");
+    BMP bmp("../../tasks/image_processor/test_script/data/flag.bmp");
 
-    REQUIRE(true);
+    REQUIRE(true); // TODO
+}
+
+TEST_CASE("BMPToImage") {
+    BMP bmp("../../tasks/image_processor/test_script/data/flag.bmp");
+
+    Image img = bmp.GetImage();
+
+    REQUIRE(true); // TODO
 }
