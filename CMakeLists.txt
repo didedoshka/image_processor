@@ -12,5 +12,6 @@ add_executable(
     image_processor
     pixel.cpp
     image.cpp
+    BMP.cpp
     image_processor.cpp
 )
