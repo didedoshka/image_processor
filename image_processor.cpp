@@ -1,5 +1,7 @@
+#include "BMP.hpp"
 #include "pixel.hpp"
 #include "image.hpp"
+#include <exception>
 #include <iostream>
 #include <fstream>
 #include <vector>
@@ -35,14 +37,47 @@ int main(int argc, char** argv) {
         std::cout << "Error parsing path to input file. Aborting." << '\n';
         return 1;
     }
+
+    try {
+        BMP input(input_path);
+    } catch (const std::exception& ex) {
+        std::cout << ex.what() << ' ' << "Aborting." << '\n';
+        return 1;
+    } catch (...) {
+        std::cout << "Unexpected error occured. Aborting" << '\n';
+        return 1;
+    }
+
     std::string output_path;
     arguments >> output_path;
     if (arguments.fail()) {
         std::cout << "Error parsing path to output file. Aborting." << '\n';
         return 1;
     }
-    std::ifstream file("flag2.bmp");
-    std::cout << file.fail() << '\n';
+
+    while (!arguments.fail()) {
+        std::string filter_name;
+        arguments >> filter_name;
+        if (arguments.fail()) {
+            std::cout << "Error parsing filter name. Aborting." << '\n';
+            return 1;
+        }
+        if (filter_name == "-crop") {
+            size_t width = 0;
+            size_t height = 0;
+            arguments >> width;
+            if (arguments.fail()) {
+                std::cout << "Error parsing parameter width for filter Crop. Aborting." << '\n';
+                return 1;
+            }
+            arguments >> height;
+            if (arguments.fail()) {
+                std::cout << "Error parsing parameter height for filter Crop. Aborting." << '\n';
+                return 1;
+            }
+            image = Crop(image, width, height);
+        }
+    }
 
     return 0;
 }
