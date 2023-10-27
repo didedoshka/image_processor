@@ -12,7 +12,7 @@ struct PixelDouble {
     PixelDouble(double red, double green, double blue);
     PixelDouble(uint8_t red, uint8_t green, uint8_t blue);
 
-    uint8_t DoubleToUInt8T(double brightness);
+    static uint8_t DoubleToUInt8T(double brightness);
 
     friend std::ostream& operator<<(std::ostream& os, const PixelDouble& pixel);
 };

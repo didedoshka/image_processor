@@ -60,22 +60,36 @@ Image BMP::GetImage() const {
     input.read(reinterpret_cast<char*>(bitmap.get()), sizeof(*bitmap));
 
     Image image(bitmap_info_header.bitmap_width, bitmap_info_header.bitmap_height);
-    size_t row_size = (bitmap_info_header.bits_per_pixel * bitmap_info_header.bitmap_width + 31) / 32 * 4;
+    size_t row_size = GetRowSize(bitmap_info_header.bits_per_pixel, bitmap_info_header.bitmap_width);
     for (size_t row = 0; row < image.GetHeight(); row++) {
-        for (size_t pixel_in_row = 0; pixel_in_row < image.GetWidth(); ++pixel_in_row) {
-            image.At(row, pixel_in_row) =
-                PixelDouble(bitmap.get()[bmp_header.bitmap_offset + row * row_size + pixel_in_row * 3 + 2],
-                            bitmap.get()[bmp_header.bitmap_offset + row * row_size + pixel_in_row * 3 + 1],
-                            bitmap.get()[bmp_header.bitmap_offset + row * row_size + pixel_in_row * 3]);
+        for (size_t column = 0; column < image.GetWidth(); ++column) {
+            image.At(row, column) =
+                PixelDouble(bitmap.get()[bmp_header.bitmap_offset + row * row_size + column * 3 + 2],
+                            bitmap.get()[bmp_header.bitmap_offset + row * row_size + column * 3 + 1],
+                            bitmap.get()[bmp_header.bitmap_offset + row * row_size + column * 3]);
         }
     }
     return image;
 }
 
-void Save(const Image& image) {
+void BMP::Save(const Image& image) {
     BMPHeader bmp_header;
     BitmapInfoHeader bitmap_info_header;
-    bitmap_info_header.bitmap_width = image.GetWidth();
-    bitmap_info_header.bitmap_height = image.GetHeight();
-    bmp_header.file_size = (bmp_header.bitmap_offset)
+    bitmap_info_header.bitmap_width = static_cast<int32_t>(image.GetWidth());
+    bitmap_info_header.bitmap_height = static_cast<int32_t>(image.GetHeight());
+    size_t row_size = GetRowSize(bitmap_info_header.bits_per_pixel, bitmap_info_header.bitmap_width);
+    bmp_header.file_size = (bmp_header.bitmap_offset + bitmap_info_header.bitmap_height * row_size);
+
+    std::unique_ptr<uint8_t> bitmap(new uint8_t[bmp_header.file_size - bmp_header.bitmap_offset]);
+    for (size_t row = 0; row < image.GetHeight(); row++) {
+        for (size_t column = 0; column < image.GetWidth(); ++column) {
+            PixelDouble current = image.At(row, column);
+            bitmap.get()[bmp_header.bitmap_offset + row * row_size + column * 3 + 2] =
+                PixelDouble::DoubleToUInt8T(current.red);
+            bitmap.get()[bmp_header.bitmap_offset + row * row_size + column * 3 + 1] =
+                PixelDouble::DoubleToUInt8T(current.green);
+            bitmap.get()[bmp_header.bitmap_offset + row * row_size + column * 3] =
+                PixelDouble::DoubleToUInt8T(current.blue);
+        }
+    }
 }
