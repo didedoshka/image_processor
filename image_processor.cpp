@@ -22,8 +22,8 @@ int main(int argc, char** argv) {
                      "Grayscale (-gs) -- transforms image to grayscale\n"
                      "Negative (-neg) -- transforms image to negative\n"
                      "Sharpening (-sharp) -- increases sharpness\n"
-                     "Edge Detection (-edge threshold) -- detects the edges, threshold is a number between 0 and 255 "
-                     "that determens what is considered an edge\n"
+                     "Edge Detection (-edge threshold) -- detects the edges, threshold is a number between 0 and 1 "
+                     "that determines what is considered an edge\n"
                      "Gaussian Blur (-blur sigma) -- applies Gaussian blur with the given sigma\n";
         return 0;
     }
