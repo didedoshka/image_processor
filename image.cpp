@@ -1,19 +1,19 @@
 #include "image.hpp"
 
-Image::Image(size_t width, size_t height) : width_(width), height_(height), pixels_(width_ * height_) {
+Image::Image(uint32_t width, uint32_t height) : width_(width), height_(height), pixels_(width_ * height_) {
 }
 
-const size_t Image::GetWidth() const {
+const uint32_t Image::GetWidth() const {
     return width_;
 }
-const size_t Image::GetHeight() const {
+const uint32_t Image::GetHeight() const {
     return height_;
 }
 
-const PixelDouble& Image::At(size_t x, size_t y) const {
-    return pixels_[y * width_ + x];
+const PixelDouble& Image::At(uint32_t row, uint32_t column) const {
+    return pixels_[row * width_ + column];
 }
 
-PixelDouble& Image::At(size_t x, size_t y) {
-    return pixels_[y * width_ + x];
+PixelDouble& Image::At(uint32_t row, uint32_t column) {
+    return pixels_[row * width_ + column];
 }

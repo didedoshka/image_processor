@@ -63,7 +63,7 @@ Image BMP::GetImage() const {
     size_t row_size = (bitmap_info_header.bits_per_pixel * bitmap_info_header.bitmap_width + 31) / 32 * 4;
     for (size_t row = 0; row < image.GetHeight(); row++) {
         for (size_t pixel_in_row = 0; pixel_in_row < image.GetWidth(); ++pixel_in_row) {
-            image.At(pixel_in_row, row) =
+            image.At(row, pixel_in_row) =
                 PixelDouble(bitmap.get()[bmp_header.bitmap_offset + row * row_size + pixel_in_row * 3 + 2],
                             bitmap.get()[bmp_header.bitmap_offset + row * row_size + pixel_in_row * 3 + 1],
                             bitmap.get()[bmp_header.bitmap_offset + row * row_size + pixel_in_row * 3]);
