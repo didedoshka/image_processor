@@ -8,7 +8,7 @@
 #include <stdexcept>
 #include "pixel.hpp"
 
-size_t GetRowSize(uint16_t bits_per_pixel, uint32_t bitmap_width) {
+size_t BMP::GetRowSize(uint16_t bits_per_pixel, uint32_t bitmap_width) const {
     return (bits_per_pixel * bitmap_width + 31) / 32 * 4;
 }
 
