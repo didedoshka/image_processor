@@ -8,6 +8,9 @@
 #include <stdexcept>
 #include "pixel.hpp"
 
+size_t GetRowSize(uint16_t bits_per_pixel, uint32_t bitmap_width) {
+    return (bits_per_pixel * bitmap_width + 31) / 32 * 4;
+}
 
 BMP::BMP(const std::string& path) : path_(path) {
 }
@@ -57,13 +60,22 @@ Image BMP::GetImage() const {
     input.read(reinterpret_cast<char*>(bitmap.get()), sizeof(*bitmap));
 
     Image image(bitmap_info_header.bitmap_width, bitmap_info_header.bitmap_height);
-    size_t row_size = (bitmap_info_header.bits_per_pixel * image.GetWidth() + 31) / 32 * 4;
+    size_t row_size = (bitmap_info_header.bits_per_pixel * bitmap_info_header.bitmap_width + 31) / 32 * 4;
     for (size_t row = 0; row < image.GetHeight(); row++) {
         for (size_t pixel_in_row = 0; pixel_in_row < image.GetWidth(); ++pixel_in_row) {
-            image.At(pixel_in_row, row) = PixelDouble(bitmap.get()[bmp_header.bitmap_offset + row * row_size + pixel_in_row * 3 + 2],
-                                                      bitmap.get()[bmp_header.bitmap_offset + row * row_size + pixel_in_row * 3 + 1],
-                                                      bitmap.get()[bmp_header.bitmap_offset + row * row_size + pixel_in_row * 3]);
+            image.At(pixel_in_row, row) =
+                PixelDouble(bitmap.get()[bmp_header.bitmap_offset + row * row_size + pixel_in_row * 3 + 2],
+                            bitmap.get()[bmp_header.bitmap_offset + row * row_size + pixel_in_row * 3 + 1],
+                            bitmap.get()[bmp_header.bitmap_offset + row * row_size + pixel_in_row * 3]);
         }
     }
     return image;
+}
+
+void Save(const Image& image) {
+    BMPHeader bmp_header;
+    BitmapInfoHeader bitmap_info_header;
+    bitmap_info_header.bitmap_width = image.GetWidth();
+    bitmap_info_header.bitmap_height = image.GetHeight();
+    bmp_header.file_size = (bmp_header.bitmap_offset)
 }
