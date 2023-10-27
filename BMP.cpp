@@ -16,10 +16,9 @@ size_t TwoCharsToSizeT(const unsigned char* start) {
 
 BMP::BMP(const std::string& path) {
     std::ifstream input;
-    try {
-        input = std::ifstream(path, std::ios::binary);
-    } catch (...) {
-        // TODO
+    input = std::ifstream(path, std::ios::binary);
+    if (input.fail()) {
+        throw std::runtime_error{"Can't load input file."};
     }
 
     data_ = std::vector<unsigned char>(std::istreambuf_iterator<char>(input), {});
@@ -48,10 +47,9 @@ Image BMP::GetImage() const {
     size_t row_size = (24 * image.GetWidth() + 31) / 32 * 4;
     for (size_t row = 0; row < image.GetHeight(); row++) {
         for (size_t pixel_in_row = 0; pixel_in_row < image.GetWidth(); ++pixel_in_row) {
-            image.At(pixel_in_row, row) =
-                PixelDouble(data_[pixel_array_offset + row * row_size + pixel_in_row * 3 + 2],
-                            data_[pixel_array_offset + row * row_size + pixel_in_row * 3 + 1],
-                            data_[pixel_array_offset + row * row_size + pixel_in_row * 3]);
+            image.At(pixel_in_row, row) = PixelDouble(data_[pixel_array_offset + row * row_size + pixel_in_row * 3 + 2],
+                                                      data_[pixel_array_offset + row * row_size + pixel_in_row * 3 + 1],
+                                                      data_[pixel_array_offset + row * row_size + pixel_in_row * 3]);
         }
     }
     return image;
