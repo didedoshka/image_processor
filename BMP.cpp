@@ -79,6 +79,9 @@ Image BMP::GetImage() const {
     std::unique_ptr<uint8_t> bitmap(new uint8_t[bitmap_size]);
 
     input.read(reinterpret_cast<char*>(bitmap.get()), bitmap_size);
+    if (input.fail()) {
+        throw std::runtime_error("Input file is too small: bitmap doen't fit.");
+    }
 
     Image image(bitmap_info_header.bitmap_width, bitmap_info_header.bitmap_height);
     size_t row_size = GetRowSize(bitmap_info_header.bits_per_pixel, bitmap_info_header.bitmap_width);
@@ -86,8 +89,7 @@ Image BMP::GetImage() const {
         for (size_t column = 0; column < image.GetWidth(); ++column) {
             image.At(row, column) =
                 PixelDouble(bitmap.get()[row * row_size + column * 3 + 2],
-                            bitmap.get()[row * row_size + column * 3 + 1],
-                            bitmap.get()[row * row_size + column * 3]);
+                            bitmap.get()[row * row_size + column * 3 + 1], bitmap.get()[row * row_size + column * 3]);
         }
     }
     return image;
@@ -101,23 +103,37 @@ void BMP::Save(const Image& image) {
     size_t row_size = GetRowSize(bitmap_info_header.bits_per_pixel, bitmap_info_header.bitmap_width);
     bmp_header.file_size = (bmp_header.bitmap_offset + bitmap_info_header.bitmap_height * row_size);
 
-    std::unique_ptr<uint8_t> bitmap(new uint8_t[bmp_header.file_size - bmp_header.bitmap_offset]);
+    std::streamsize bitmap_size = bmp_header.file_size - bmp_header.bitmap_offset;
+    std::unique_ptr<uint8_t> bitmap(new uint8_t[bitmap_size]);
     for (size_t row = 0; row < image.GetHeight(); row++) {
         for (size_t column = 0; column < image.GetWidth(); ++column) {
             PixelDouble current = image.At(row, column);
-            bitmap.get()[bmp_header.bitmap_offset + row * row_size + column * 3 + 2] =
-                PixelDouble::DoubleToUInt8T(current.red);
-            bitmap.get()[bmp_header.bitmap_offset + row * row_size + column * 3 + 1] =
-                PixelDouble::DoubleToUInt8T(current.green);
-            bitmap.get()[bmp_header.bitmap_offset + row * row_size + column * 3] =
-                PixelDouble::DoubleToUInt8T(current.blue);
+            bitmap.get()[row * row_size + column * 3 + 2] = PixelDouble::DoubleToUInt8T(current.red);
+            bitmap.get()[row * row_size + column * 3 + 1] = PixelDouble::DoubleToUInt8T(current.green);
+            bitmap.get()[row * row_size + column * 3] = PixelDouble::DoubleToUInt8T(current.blue);
         }
     }
 
-    std::ofstream output(path_, std::ios::binary);
+    char bmp_header_buffer[14];
+    size_t bmp_header_offset = 0;
 
-    output.write(reinterpret_cast<char*>(&bmp_header), sizeof(bmp_header));
+    memcpy(&bmp_header_buffer[bmp_header_offset], bmp_header.magic, sizeof(bmp_header.magic));
+    bmp_header_offset += sizeof(bmp_header.magic);
+
+    memcpy(&bmp_header_buffer[bmp_header_offset], &bmp_header.file_size, sizeof(bmp_header.file_size));
+    bmp_header_offset += sizeof(bmp_header.file_size);
+
+    memcpy(&bmp_header_buffer[bmp_header_offset], bmp_header.depends_on_creator, sizeof(bmp_header.depends_on_creator));
+    bmp_header_offset += sizeof(bmp_header.depends_on_creator);
+
+    memcpy(&bmp_header_buffer[bmp_header_offset], &bmp_header.bitmap_offset, sizeof(bmp_header.bitmap_offset));
+    bmp_header_offset += sizeof(bmp_header.bitmap_offset);
+
+    std::ofstream output(path_, std::ios::binary);
+    output.write(reinterpret_cast<char*>(bmp_header_buffer), sizeof(bmp_header_buffer));
     output.write(reinterpret_cast<char*>(&bitmap_info_header), sizeof(bitmap_info_header));
-    std::streamsize bitmap_size = bmp_header.file_size - bmp_header.bitmap_offset;
     output.write(reinterpret_cast<char*>(bitmap.get()), bitmap_size);
+    if (output.fail()) {
+        throw std::runtime_error("Error occured while saving the file.");
+    }
 }

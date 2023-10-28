@@ -15,7 +15,7 @@ PixelDouble::PixelDouble(uint8_t red, uint8_t green, uint8_t blue)
 }
 
 uint8_t PixelDouble::DoubleToUInt8T(double brightness) {
-    return static_cast<uint8_t>(std::round(std::max(std::min(brightness, 1.0), 0.0)) * UINT8_MAX);
+    return static_cast<uint8_t>(std::round(std::max(std::min(brightness, 1.0), 0.0) * UINT8_MAX));
 }
 
 std::ostream& operator<<(std::ostream& os, const PixelDouble& pixel) {
