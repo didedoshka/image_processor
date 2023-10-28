@@ -15,25 +15,43 @@ size_t BMP::GetRowSize(uint16_t bits_per_pixel, uint32_t bitmap_width) {
 BMP::BMP(const std::string& path) : path_(path) {
 }
 
+void Read(std::ifstream& ifs, auto& data) {
+    ifs.read(reinterpret_cast<char*>(&data), sizeof(data));
+}
+
 Image BMP::GetImage() const {
     std::ifstream input = std::ifstream(path_, std::ios::binary);
     if (input.fail()) {
         throw std::runtime_error{"Can't load input file."};
     }
 
-    BMPHeader bmp_header;
-    input.read(reinterpret_cast<char*>(&bmp_header), sizeof(bmp_header));
+    char bmp_header_buffer[14];
+    input.read(reinterpret_cast<char*>(bmp_header_buffer), sizeof(bmp_header_buffer));
     if (input.fail()) {
         throw std::runtime_error{"Input file is too small: Bitmap file header dosn't fit."};
     }
 
+    BMPHeader bmp_header;
+    size_t bmp_header_offset = 0;
+
+    memcpy(bmp_header.magic, &bmp_header_buffer[bmp_header_offset], sizeof(bmp_header.magic));
+    bmp_header_offset += sizeof(bmp_header.magic);
     if (bmp_header.magic[0] != 'B' || bmp_header.magic[1] != 'M') {
         throw std::runtime_error{"Input file is not BMP."};
     }
+
+    memcpy(&bmp_header.file_size, &bmp_header_buffer[bmp_header_offset], sizeof(bmp_header.file_size));
+    bmp_header_offset += sizeof(bmp_header.file_size);
+
+    memcpy(bmp_header.depends_on_creator, &bmp_header_buffer[bmp_header_offset], sizeof(bmp_header.depends_on_creator));
+    bmp_header_offset += sizeof(bmp_header.depends_on_creator);
+
+    memcpy(&bmp_header.bitmap_offset, &bmp_header_buffer[bmp_header_offset], sizeof(bmp_header.bitmap_offset));
+    bmp_header_offset += sizeof(bmp_header.bitmap_offset);
     if (bmp_header.bitmap_offset != 54) {
         throw std::runtime_error{"Input file uses wrong Bitmap file header or DIB header."};
     }
-
+    return Image(10, 10);
     BitmapInfoHeader bitmap_info_header;
     input.read(reinterpret_cast<char*>(&bitmap_info_header), sizeof(bitmap_info_header));
     if (input.fail()) {
