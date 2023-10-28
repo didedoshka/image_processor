@@ -56,8 +56,10 @@ Image BMP::GetImage() const {
         throw std::runtime_error("There are not 2^24 colors in the pallete.");
     }
 
-    std::unique_ptr<uint8_t> bitmap(new uint8_t[bmp_header.file_size - bmp_header.bitmap_offset]);
-    input.read(reinterpret_cast<char*>(bitmap.get()), sizeof(*bitmap));
+    std::streamsize bitmap_size = bmp_header.file_size - bmp_header.bitmap_offset;
+    std::unique_ptr<uint8_t> bitmap(new uint8_t[bitmap_size]);
+
+    input.read(reinterpret_cast<char*>(bitmap.get()), bitmap_size);
 
     Image image(bitmap_info_header.bitmap_width, bitmap_info_header.bitmap_height);
     size_t row_size = GetRowSize(bitmap_info_header.bits_per_pixel, bitmap_info_header.bitmap_width);
@@ -92,4 +94,11 @@ void BMP::Save(const Image& image) {
                 PixelDouble::DoubleToUInt8T(current.blue);
         }
     }
+
+    std::ofstream output(path_, std::ios::binary);
+
+    output.write(reinterpret_cast<char*>(&bmp_header), sizeof(bmp_header));
+    output.write(reinterpret_cast<char*>(&bitmap_info_header), sizeof(bitmap_info_header));
+    std::streamsize bitmap_size = bmp_header.file_size - bmp_header.bitmap_offset;
+    output.write(reinterpret_cast<char*>(bitmap.get()), bitmap_size);
 }
