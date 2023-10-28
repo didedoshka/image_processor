@@ -108,9 +108,9 @@ void BMP::Save(const Image& image) {
     for (size_t row = 0; row < image.GetHeight(); row++) {
         for (size_t column = 0; column < image.GetWidth(); ++column) {
             PixelDouble current = image.At(row, column);
-            bitmap.get()[row * row_size + column * 3 + 2] = PixelDouble::DoubleToUInt8T(current.red);
-            bitmap.get()[row * row_size + column * 3 + 1] = PixelDouble::DoubleToUInt8T(current.green);
-            bitmap.get()[row * row_size + column * 3] = PixelDouble::DoubleToUInt8T(current.blue);
+            bitmap.get()[row * row_size + column * 3 + 2] = PixelDouble::DoubleToUInt8T(current.GetRed());
+            bitmap.get()[row * row_size + column * 3 + 1] = PixelDouble::DoubleToUInt8T(current.GetGreen());
+            bitmap.get()[row * row_size + column * 3] = PixelDouble::DoubleToUInt8T(current.GetBlue());
         }
     }
 
