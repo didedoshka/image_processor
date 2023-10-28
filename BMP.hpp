@@ -33,5 +33,5 @@ public:
 
 private:
     std::string path_;
-    static size_t GetRowSize(uint16_t bits_per_pixel, uint32_t bitmap_width);
+    static Image::SizeType GetRowSize(uint16_t bits_per_pixel, uint32_t bitmap_width);
 };

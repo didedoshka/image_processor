@@ -8,7 +8,7 @@
 #include <stdexcept>
 #include "pixel.hpp"
 
-size_t BMP::GetRowSize(uint16_t bits_per_pixel, uint32_t bitmap_width) {
+Image::SizeType BMP::GetRowSize(uint16_t bits_per_pixel, uint32_t bitmap_width) {
     return (bits_per_pixel * bitmap_width + 31) / 32 * 4;
 }
 
@@ -84,9 +84,9 @@ Image BMP::GetImage() const {
     }
 
     Image image(bitmap_info_header.bitmap_width, bitmap_info_header.bitmap_height);
-    size_t row_size = GetRowSize(bitmap_info_header.bits_per_pixel, bitmap_info_header.bitmap_width);
-    for (size_t row = 0; row < image.GetHeight(); row++) {
-        for (size_t column = 0; column < image.GetWidth(); ++column) {
+    Image::SizeType row_size = GetRowSize(bitmap_info_header.bits_per_pixel, bitmap_info_header.bitmap_width);
+    for (Image::SizeType row = 0; row < image.GetHeight(); row++) {
+        for (Image::SizeType column = 0; column < image.GetWidth(); ++column) {
             image.At(row, column) =
                 PixelDouble(bitmap.get()[row * row_size + column * 3 + 2],
                             bitmap.get()[row * row_size + column * 3 + 1], bitmap.get()[row * row_size + column * 3]);
@@ -100,13 +100,13 @@ void BMP::Save(const Image& image) {
     BitmapInfoHeader bitmap_info_header;
     bitmap_info_header.bitmap_width = static_cast<int32_t>(image.GetWidth());
     bitmap_info_header.bitmap_height = static_cast<int32_t>(image.GetHeight());
-    size_t row_size = GetRowSize(bitmap_info_header.bits_per_pixel, bitmap_info_header.bitmap_width);
+    Image::SizeType row_size = GetRowSize(bitmap_info_header.bits_per_pixel, bitmap_info_header.bitmap_width);
     bmp_header.file_size = (bmp_header.bitmap_offset + bitmap_info_header.bitmap_height * row_size);
 
     std::streamsize bitmap_size = bmp_header.file_size - bmp_header.bitmap_offset;
     std::unique_ptr<uint8_t> bitmap(new uint8_t[bitmap_size]);
-    for (size_t row = 0; row < image.GetHeight(); row++) {
-        for (size_t column = 0; column < image.GetWidth(); ++column) {
+    for (Image::SizeType row = 0; row < image.GetHeight(); row++) {
+        for (Image::SizeType column = 0; column < image.GetWidth(); ++column) {
             PixelDouble current = image.At(row, column);
             bitmap.get()[row * row_size + column * 3 + 2] = PixelDouble::DoubleToUInt8T(current.GetRed());
             bitmap.get()[row * row_size + column * 3 + 1] = PixelDouble::DoubleToUInt8T(current.GetGreen());
