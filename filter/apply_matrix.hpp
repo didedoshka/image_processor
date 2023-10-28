@@ -17,5 +17,6 @@ public:
     Image operator()(const Image& image);
 
 private:
+    std::pair<Image::SizeType, Image::SizeType> GetNearest(Image::SizeType row, Image::SizeType column, Image::SizeType width, Image::SizeType height);
     Matrix matrix_;
 };
