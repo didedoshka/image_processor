@@ -51,8 +51,9 @@ Image BMP::GetImage() const {
     if (bmp_header.bitmap_offset != 54) {
         throw std::runtime_error{"Input file uses wrong Bitmap file header or DIB header."};
     }
-    return Image(10, 10);
+
     BitmapInfoHeader bitmap_info_header;
+
     input.read(reinterpret_cast<char*>(&bitmap_info_header), sizeof(bitmap_info_header));
     if (input.fail()) {
         throw std::runtime_error{"Input file is too small: BITMAPINFOHEADER dosn't fit."};
@@ -84,9 +85,9 @@ Image BMP::GetImage() const {
     for (size_t row = 0; row < image.GetHeight(); row++) {
         for (size_t column = 0; column < image.GetWidth(); ++column) {
             image.At(row, column) =
-                PixelDouble(bitmap.get()[bmp_header.bitmap_offset + row * row_size + column * 3 + 2],
-                            bitmap.get()[bmp_header.bitmap_offset + row * row_size + column * 3 + 1],
-                            bitmap.get()[bmp_header.bitmap_offset + row * row_size + column * 3]);
+                PixelDouble(bitmap.get()[row * row_size + column * 3 + 2],
+                            bitmap.get()[row * row_size + column * 3 + 1],
+                            bitmap.get()[row * row_size + column * 3]);
         }
     }
     return image;
