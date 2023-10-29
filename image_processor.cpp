@@ -4,7 +4,6 @@
 
 #include <exception>
 #include <iostream>
-#include <fstream>
 #include <vector>
 #include <sstream>
 #include "filter/filter.hpp"
