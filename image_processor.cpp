@@ -91,7 +91,12 @@ int main(int argc, char** argv) {
     }
 
     for (std::unique_ptr<Filter>& filter : filter_sequence) {
-        image = (*filter)(image);
+        try {
+            image = (*filter)(image);
+        } catch (const std::exception& ex) {
+            std::cout << "While applying a filter, an error occured: " << ex.what() << "Aborting." << '\n';
+            return 1;
+        }
     }
 
     BMP output_bmp(output_path);
