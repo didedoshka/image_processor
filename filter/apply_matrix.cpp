@@ -1,6 +1,6 @@
 #include "apply_matrix.hpp"
+#include <iostream>
 #include <stdexcept>
-
 
 std::pair<Image::SizeType, Image::SizeType> ApplyMatrix::GetNearest(Image::SizeType row, Image::SizeType column,
                                                                     Image::SizeType width, Image::SizeType height) {
@@ -23,6 +23,17 @@ std::pair<Image::SizeType, Image::SizeType> ApplyMatrix::GetNearest(Image::SizeT
 Image ApplyMatrix::operator()(const Image& image) {
     if (matrix_.empty()) {
         throw std::runtime_error{"Matrix in ApplyMatrix is empty"};
+    }
+    size_t operations = static_cast<size_t>(image.GetHeight()) * static_cast<size_t>(image.GetWidth() * matrix_.size());
+    const size_t operations_per_second = 1'000'000'000;
+    if (operations >= operations_per_second) {
+        std::cout << "Applying this filter to this picture is going to take long, approximately "
+                  << static_cast<float>(operations) / static_cast<float>(operations_per_second) << " seconds" << '\n';
+    } else if (operations >= 10 * 60 * operations_per_second) {
+        std::cout << "Applying this filter to this picture is going to take extremely long, approximately "
+                  << static_cast<float>(operations) / static_cast<float>(operations_per_second) << " seconds" << '\n';
+    } else if (operations >= 60 * 60 * operations_per_second) {
+        throw std::runtime_error{"Applying this filter is going to take more than an hour"};
     }
     Image result(image.GetWidth(), image.GetHeight());
 
