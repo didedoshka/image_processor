@@ -6,6 +6,7 @@
 #include <iostream>
 #include <vector>
 #include <sstream>
+#include <memory>
 #include "filter/filter.hpp"
 #include "filter/crop.hpp"
 #include "filter/grayscale.hpp"

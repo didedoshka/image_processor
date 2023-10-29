@@ -34,19 +34,19 @@ Image BMP::GetImage() const {
     BMPHeader bmp_header;
     size_t bmp_header_offset = 0;
 
-    memcpy(bmp_header.magic, &bmp_header_buffer[bmp_header_offset], sizeof(bmp_header.magic));
+    std::memcpy(bmp_header.magic, &bmp_header_buffer[bmp_header_offset], sizeof(bmp_header.magic));
     bmp_header_offset += sizeof(bmp_header.magic);
     if (bmp_header.magic[0] != 'B' || bmp_header.magic[1] != 'M') {
         throw std::runtime_error{"Input file is not BMP."};
     }
 
-    memcpy(&bmp_header.file_size, &bmp_header_buffer[bmp_header_offset], sizeof(bmp_header.file_size));
+    std::memcpy(&bmp_header.file_size, &bmp_header_buffer[bmp_header_offset], sizeof(bmp_header.file_size));
     bmp_header_offset += sizeof(bmp_header.file_size);
 
-    memcpy(bmp_header.depends_on_creator, &bmp_header_buffer[bmp_header_offset], sizeof(bmp_header.depends_on_creator));
+    std::memcpy(bmp_header.depends_on_creator, &bmp_header_buffer[bmp_header_offset], sizeof(bmp_header.depends_on_creator));
     bmp_header_offset += sizeof(bmp_header.depends_on_creator);
 
-    memcpy(&bmp_header.bitmap_offset, &bmp_header_buffer[bmp_header_offset], sizeof(bmp_header.bitmap_offset));
+    std::memcpy(&bmp_header.bitmap_offset, &bmp_header_buffer[bmp_header_offset], sizeof(bmp_header.bitmap_offset));
     bmp_header_offset += sizeof(bmp_header.bitmap_offset);
     if (bmp_header.bitmap_offset != 54) {
         throw std::runtime_error{"Input file uses wrong Bitmap file header or DIB header."};
@@ -117,16 +117,16 @@ void BMP::Save(const Image& image) {
     char bmp_header_buffer[14];
     size_t bmp_header_offset = 0;
 
-    memcpy(&bmp_header_buffer[bmp_header_offset], bmp_header.magic, sizeof(bmp_header.magic));
+    std::memcpy(&bmp_header_buffer[bmp_header_offset], bmp_header.magic, sizeof(bmp_header.magic));
     bmp_header_offset += sizeof(bmp_header.magic);
 
-    memcpy(&bmp_header_buffer[bmp_header_offset], &bmp_header.file_size, sizeof(bmp_header.file_size));
+    std::memcpy(&bmp_header_buffer[bmp_header_offset], &bmp_header.file_size, sizeof(bmp_header.file_size));
     bmp_header_offset += sizeof(bmp_header.file_size);
 
-    memcpy(&bmp_header_buffer[bmp_header_offset], bmp_header.depends_on_creator, sizeof(bmp_header.depends_on_creator));
+    std::memcpy(&bmp_header_buffer[bmp_header_offset], bmp_header.depends_on_creator, sizeof(bmp_header.depends_on_creator));
     bmp_header_offset += sizeof(bmp_header.depends_on_creator);
 
-    memcpy(&bmp_header_buffer[bmp_header_offset], &bmp_header.bitmap_offset, sizeof(bmp_header.bitmap_offset));
+    std::memcpy(&bmp_header_buffer[bmp_header_offset], &bmp_header.bitmap_offset, sizeof(bmp_header.bitmap_offset));
     bmp_header_offset += sizeof(bmp_header.bitmap_offset);
 
     std::ofstream output(path_, std::ios::binary);
