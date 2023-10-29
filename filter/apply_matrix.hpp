@@ -2,9 +2,9 @@
 
 #include <cstdint>
 #include <vector>
-#include "filter/filter.hpp"
+#include "filter.hpp"
 
-class ApplyMatrix : virtual Filter {
+class ApplyMatrix : public virtual Filter {
 public:
     struct MatrixElement {
         int8_t row_delta;
@@ -13,10 +13,12 @@ public:
     };
 
     using Matrix = std::vector<MatrixElement>;
-    explicit ApplyMatrix(const Matrix& matrix);
     Image operator()(const Image& image) override;
 
 private:
-    std::pair<Image::SizeType, Image::SizeType> GetNearest(Image::SizeType row, Image::SizeType column, Image::SizeType width, Image::SizeType height);
+    std::pair<Image::SizeType, Image::SizeType> GetNearest(Image::SizeType row, Image::SizeType column,
+                                                           Image::SizeType width, Image::SizeType height);
+
+protected:
     Matrix matrix_;
 };

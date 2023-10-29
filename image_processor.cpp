@@ -11,6 +11,7 @@
 #include "filter/crop.hpp"
 #include "filter/grayscale.hpp"
 #include "filter/negative.hpp"
+#include "filter/sharpening.hpp"
 
 int main(int argc, char** argv) {
     if (argc == 1) {
@@ -33,6 +34,7 @@ int main(int argc, char** argv) {
                      "Gaussian Blur (-blur sigma) -- applies Gaussian blur with the given sigma\n";
         return 0;
     }
+
     if (argc < 2) {
         std::cout << "Error parsing path to input file. Aborting." << '\n';
         return 1;
@@ -83,6 +85,8 @@ int main(int argc, char** argv) {
             filter_sequence.emplace_back(new Grayscale());
         } else if (filter_name == "-neg") {
             filter_sequence.emplace_back(new Negative());
+        } else if (filter_name == "-sharp") {
+            filter_sequence.emplace_back(new Sharpening());
         }
     }
 
