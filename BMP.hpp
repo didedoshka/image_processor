@@ -9,7 +9,7 @@ struct BMPHeader {
     uint32_t file_size{};
     uint8_t depends_on_creator[4]{};
     uint32_t bitmap_offset{54};
-};
+} __attribute__((packed));
 
 struct BitmapInfoHeader {
     uint32_t header_size{40};
