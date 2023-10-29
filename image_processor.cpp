@@ -33,27 +33,18 @@ int main(int argc, char** argv) {
                      "Gaussian Blur (-blur sigma) -- applies Gaussian blur with the given sigma\n";
         return 0;
     }
-    std::stringstream arguments;
-    for (size_t i = 1; i < argc; ++i) {
-        arguments << argv[i] << ' ';
-    }
-    std::string input_path;
-    arguments >> input_path;
-    if (arguments.fail()) {
+    if (argc < 2) {
         std::cout << "Error parsing path to input file. Aborting." << '\n';
         return 1;
     }
-
-    BMP input_bmp(input_path);
-
-    std::string output_path;
-    arguments >> output_path;
-    if (arguments.fail()) {
+    std::string input_path = argv[1];
+    if (argc < 3) {
         std::cout << "Error parsing path to output file. Aborting." << '\n';
         return 1;
     }
+    std::string output_path = argv[2];
 
-    BMP output_bmp(output_path);
+    BMP input_bmp(input_path);
     Image image{0, 0};
     try {
         image = input_bmp.GetImage();
@@ -62,6 +53,10 @@ int main(int argc, char** argv) {
         return 1;
     }
 
+    std::stringstream arguments;
+    for (size_t i = 3; i < argc; ++i) {
+        arguments << argv[i] << ' ';
+    }
     std::vector<std::unique_ptr<Filter>> filter_sequence;
 
     while (true) {
@@ -95,6 +90,7 @@ int main(int argc, char** argv) {
         image = (*filter)(image);
     }
 
+    BMP output_bmp(output_path);
     try {
         output_bmp.Save(image);
     } catch (const std::exception& ex) {
