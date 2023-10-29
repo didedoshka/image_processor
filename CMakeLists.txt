@@ -19,4 +19,5 @@ add_executable(
     filter/negative.cpp
     filter/apply_matrix.cpp
     filter/sharpening.cpp
+    filter/gaussian_blur.cpp
 )
