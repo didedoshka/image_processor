@@ -24,15 +24,17 @@ Image ApplyMatrix::operator()(const Image& image) {
     if (matrix_.empty()) {
         throw std::runtime_error{"Matrix in ApplyMatrix is empty"};
     }
-    size_t operations = 3 * static_cast<size_t>(image.GetHeight()) * static_cast<size_t>(image.GetWidth()) * matrix_.size();
-    std::cout << operations << '\n';
-    const size_t operations_per_second = 1'000'000'000;
+    size_t operations =
+        2 * 3 * static_cast<size_t>(image.GetHeight()) * static_cast<size_t>(image.GetWidth()) *
+        matrix_.size();  // addition and multiplication for each channel for each pixel for every element in matrix
+    const size_t operations_per_second = 500'000'000;  // Compiling in Release mode
     if (operations >= operations_per_second) {
         std::cout << "Applying this filter to this picture is going to take long, approximately "
                   << static_cast<float>(operations) / static_cast<float>(operations_per_second) << " seconds" << '\n';
     } else if (operations >= 10 * 60 * operations_per_second) {
         std::cout << "Applying this filter to this picture is going to take extremely long, approximately "
-                  << static_cast<float>(operations) / static_cast<float>(operations_per_second) / 60 << " minutes" << '\n';
+                  << static_cast<float>(operations) / static_cast<float>(operations_per_second) / 60 << " minutes"
+                  << '\n';
     } else if (operations >= 60 * 60 * operations_per_second) {
         throw std::runtime_error{"Applying this filter is going to take more than an hour"};
     }
