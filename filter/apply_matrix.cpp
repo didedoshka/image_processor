@@ -28,9 +28,9 @@ Image ApplyMatrix::operator()(const Image& image) {
 
     for (Image::SizeType row = 0; row < result.GetHeight(); ++row) {
         for (Image::SizeType column = 0; column < result.GetWidth(); ++column) {
-            double red = 0.0;
-            double green = 0.0;
-            double blue = 0.0;
+            Pixel::Channel red = 0.0;
+            Pixel::Channel green = 0.0;
+            Pixel::Channel blue = 0.0;
             for (auto [row_delta, column_delta, weight] : matrix_) {
                 auto [nearest_row, nearest_column] =
                     GetNearest(row + row_delta, column + column_delta, image.GetWidth(), image.GetHeight());
@@ -38,7 +38,7 @@ Image ApplyMatrix::operator()(const Image& image) {
                 green += weight * image.At(nearest_row, nearest_column).GetGreen();
                 blue += weight * image.At(nearest_row, nearest_column).GetBlue();
             }
-            result.At(row, column) = PixelDouble(red, green, blue);
+            result.At(row, column) = Pixel(red, green, blue);
         }
     }
 

@@ -1,15 +1,14 @@
 #pragma once
 
-#include <cstdint>
 #include <vector>
 #include "filter.hpp"
 
 class ApplyMatrix : public virtual Filter {
 public:
     struct MatrixElement {
-        int8_t row_delta;
-        int8_t column_delta;
-        int8_t weight;
+        Image::SizeType row_delta;
+        Image::SizeType column_delta;
+        Pixel::Channel weight;
     };
 
     using Matrix = std::vector<MatrixElement>;

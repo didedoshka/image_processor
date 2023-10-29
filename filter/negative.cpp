@@ -1,7 +1,7 @@
 #include "negative.hpp"
 
 Negative::Negative() {
-    change_pixel_ = [](const PixelDouble& pixel) {
-        return PixelDouble(1.0 - pixel.GetRed(), 1.0 - pixel.GetGreen(), 1.0 - pixel.GetBlue());
+    change_pixel_ = [](const Pixel& pixel) {
+        return Pixel(static_cast<Pixel::Channel>(1) - pixel.GetRed(), static_cast<Pixel::Channel>(1) - pixel.GetGreen(), static_cast<Pixel::Channel>(1) - pixel.GetBlue());
     };
 }

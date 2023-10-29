@@ -12,11 +12,11 @@ public:
     const SizeType GetWidth() const;
     const SizeType GetHeight() const;
 
-    PixelDouble& At(SizeType row, SizeType column);
-    const PixelDouble& At(SizeType row, SizeType column) const;
+    Pixel& At(SizeType row, SizeType column);
+    const Pixel& At(SizeType row, SizeType column) const;
 
 private:
     SizeType width_;
     SizeType height_;
-    std::vector<PixelDouble> pixels_;
+    std::vector<Pixel> pixels_;
 };

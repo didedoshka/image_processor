@@ -8,5 +8,5 @@ public:
     Image operator()(const Image& image) override;
 
 protected:
-    std::function<PixelDouble(PixelDouble)> change_pixel_;
+    std::function<Pixel(Pixel)> change_pixel_;
 };

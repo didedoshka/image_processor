@@ -3,26 +3,27 @@
 #include <cstdint>
 #include <ostream>
 
-class PixelDouble {
+class Pixel {
 public:
-    PixelDouble();
-    PixelDouble(double red, double green, double blue);
-    PixelDouble(uint8_t red, uint8_t green, uint8_t blue);
+    using Channel = float;
+    Pixel();
+    Pixel(Channel red, Channel green, Channel blue);
+    Pixel(uint8_t red, uint8_t green, uint8_t blue);
 
-    void SetRed(double red);
-    void SetGreen(double green);
-    void SetBlue(double blue);
+    void SetRed(Channel red);
+    void SetGreen(Channel green);
+    void SetBlue(Channel blue);
 
-    double GetRed() const;
-    double GetGreen() const;
-    double GetBlue() const;
+    Channel GetRed() const;
+    Channel GetGreen() const;
+    Channel GetBlue() const;
 
-    static uint8_t DoubleToUInt8T(double brightness);
+    static uint8_t ChannelToUInt8T(Channel brightness);
 
-    friend std::ostream& operator<<(std::ostream& os, const PixelDouble& pixel);
+    friend std::ostream& operator<<(std::ostream& os, const Pixel& pixel);
 
 private:
-    double red_;
-    double green_;
-    double blue_;
+    Channel red_;
+    Channel green_;
+    Channel blue_;
 };

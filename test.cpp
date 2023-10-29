@@ -5,11 +5,11 @@
 #include <iostream>
 
 TEST_CASE("Pixel") {
-    PixelDouble pixel_double(static_cast<uint8_t>(204), static_cast<uint8_t>(204), static_cast<uint8_t>(102));
+    Pixel pixel(static_cast<uint8_t>(204), static_cast<uint8_t>(204), static_cast<uint8_t>(102));
 
-    REQUIRE(pixel_double.green == 0.8);
-    REQUIRE(pixel_double.green == 0.8);
-    REQUIRE(pixel_double.blue == 0.4);
+    REQUIRE(pixel.GetRed() - 0.8 < 0.0001);
+    REQUIRE(pixel.GetGreen() - 0.8 < 0.0001);
+    REQUIRE(pixel.GetBlue() - 0.4 < 0.0001);
 }
 
 TEST_CASE("EmptyImage") {
@@ -18,13 +18,13 @@ TEST_CASE("EmptyImage") {
     REQUIRE(img.GetWidth() == 100);
     REQUIRE(img.GetHeight() == 100);
 
-    PixelDouble gray(0.5, 0.5, 0.5);
+    Pixel gray(0.5f, 0.5f, 0.5f);
 
-    REQUIRE(img.At(5, 1).red == 0.0);
+    REQUIRE(img.At(5, 1).GetRed() == 0.0);
     img.At(5, 1) = gray;
-    REQUIRE(img.At(5, 1).blue == 0.5);
+    REQUIRE(img.At(5, 1).GetBlue() == 0.5);
 
     const Image const_img(10, 10);
 
-    REQUIRE(const_img.At(5, 5).red == 0.0);
+    REQUIRE(const_img.At(5, 5).GetRed() == 0.0);
 }
