@@ -10,6 +10,7 @@
 #include "filter/filter.hpp"
 #include "filter/crop.hpp"
 #include "filter/grayscale.hpp"
+#include "filter/negative.hpp"
 
 int main(int argc, char** argv) {
     if (argc == 1) {
@@ -85,6 +86,8 @@ int main(int argc, char** argv) {
             filter_sequence.emplace_back(new Crop(width, height));
         } else if (filter_name == "-gs") {
             filter_sequence.emplace_back(new Grayscale());
+        } else if (filter_name == "-neg") {
+            filter_sequence.emplace_back(new Negative());
         }
     }
 

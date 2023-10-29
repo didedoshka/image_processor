@@ -16,5 +16,6 @@ add_executable(
     filter/crop.cpp
     filter/change_pixels.cpp
     filter/grayscale.cpp
+    filter/negative.cpp
     # filter/apply_matrix.cpp
 )
