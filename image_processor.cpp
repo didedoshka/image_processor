@@ -89,7 +89,7 @@ int main(int argc, char** argv) {
         } else if (filter_name == "-sharp") {
             filter_sequence.emplace_back(new Sharpening());
         } else if (filter_name == "-blur") {
-            Pixel::Channel sigma = NAN;
+            Pixel::Channel sigma = 0;
             arguments >> sigma;
             if (arguments.fail()) {
                 std::cout << "Error parsing parameter sigma for filter Gaussian Blur. Aborting." << '\n';
