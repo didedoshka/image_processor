@@ -1,7 +1,7 @@
 #include "BMP.hpp"
-// #include "filter/apply_matrix.hpp"
 #include "pixel.hpp"
 #include "image.hpp"
+
 #include <exception>
 #include <iostream>
 #include <fstream>
@@ -12,6 +12,7 @@
 #include "filter/grayscale.hpp"
 #include "filter/negative.hpp"
 #include "filter/sharpening.hpp"
+#include "filter/gaussian_blur.hpp"
 
 int main(int argc, char** argv) {
     if (argc == 1) {
@@ -87,6 +88,14 @@ int main(int argc, char** argv) {
             filter_sequence.emplace_back(new Negative());
         } else if (filter_name == "-sharp") {
             filter_sequence.emplace_back(new Sharpening());
+        } else if (filter_name == "-blur") {
+            Pixel::Channel sigma = NAN;
+            arguments >> sigma;
+            if (arguments.fail()) {
+                std::cout << "Error parsing parameter sigma for filter Gaussian Blur. Aborting." << '\n';
+                return 1;
+            }
+            filter_sequence.emplace_back(new GaussianBlur(sigma));
         }
     }
 
