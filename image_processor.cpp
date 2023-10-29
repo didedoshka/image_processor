@@ -1,4 +1,7 @@
 #include "BMP.hpp"
+#include "filter/filter.hpp"
+#include "filter/crop.hpp"
+// #include "filter/apply_matrix.hpp"
 #include "pixel.hpp"
 #include "image.hpp"
 #include <exception>
@@ -6,7 +9,7 @@
 #include <fstream>
 #include <vector>
 #include <sstream>
-// #include "filters/crop.hpp"
+
 int main(int argc, char** argv) {
     if (argc == 1) {
         std::cout << "Image processor by didedoshka\n"
@@ -57,36 +60,41 @@ int main(int argc, char** argv) {
         return 1;
     }
 
+    std::vector<std::unique_ptr<Filter>> filter_sequence;
+
+    while (true) {
+        std::string filter_name;
+        arguments >> filter_name;
+        if (arguments.fail()) {
+            break;
+        }
+        if (filter_name == "-crop") {
+            Image::SizeType width = 0;
+            Image::SizeType height = 0;
+            arguments >> width;
+            if (arguments.fail()) {
+                std::cout << "Error parsing parameter width for filter Crop. Aborting." << '\n';
+                return 1;
+            }
+            arguments >> height;
+            if (arguments.fail()) {
+                std::cout << "Error parsing parameter height for filter Crop. Aborting." << '\n';
+                return 1;
+            }
+            filter_sequence.emplace_back(new Crop(width, height));
+        }
+    }
+
+    for (std::unique_ptr<Filter>& filter : filter_sequence) {
+        image = (*filter)(image);
+    }
+
     try {
         output_bmp.Save(image);
     } catch (const std::exception& ex) {
         std::cout << "While saveing a file an error occured: " << ex.what() << ' ' << "Aborting." << '\n';
         return 1;
     }
-
-    // while (!arguments.fail()) {
-    //     std::string filter_name;
-    //     arguments >> filter_name;
-    //     if (arguments.fail()) {
-    //         std::cout << "Error parsing filter name. Aborting." << '\n';
-    //         return 1;
-    //     }
-    //     if (filter_name == "-crop") {
-    //         size_t width = 0;
-    //         size_t height = 0;
-    //         arguments >> width;
-    //         if (arguments.fail()) {
-    //             std::cout << "Error parsing parameter width for filter Crop. Aborting." << '\n';
-    //             return 1;
-    //         }
-    //         arguments >> height;
-    //         if (arguments.fail()) {
-    //             std::cout << "Error parsing parameter height for filter Crop. Aborting." << '\n';
-    //             return 1;
-    //         }
-    //         // image = Crop(image, width, height);
-    //     }
-    // }
 
     return 0;
 }

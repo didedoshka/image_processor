@@ -1,11 +1,11 @@
 #pragma once
 
-#include "filter/filter.hpp"
+#include "filter.hpp"
 
-class Crop : virtual Filter {
+class Crop : public virtual Filter {
 public:
-    Image operator()(const Image& image) override;
     Crop(Image::SizeType width, Image::SizeType height);
+    Image operator()(const Image& image) override;
 
 private:
     Image::SizeType width_;
