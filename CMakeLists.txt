@@ -4,7 +4,6 @@ add_catch(
     image.cpp
     BMP.cpp
     test.cpp
-
 )
 
 
@@ -14,4 +13,8 @@ add_executable(
     image.cpp
     BMP.cpp
     image_processor.cpp
+    filter/crop.cpp
+    filter/change_pixels.cpp
+    filter/grayscale.cpp
+    # filter/apply_matrix.cpp
 )

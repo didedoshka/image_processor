@@ -1,6 +1,4 @@
 #include "BMP.hpp"
-#include "filter/filter.hpp"
-#include "filter/crop.hpp"
 // #include "filter/apply_matrix.hpp"
 #include "pixel.hpp"
 #include "image.hpp"
@@ -9,6 +7,9 @@
 #include <fstream>
 #include <vector>
 #include <sstream>
+#include "filter/filter.hpp"
+#include "filter/crop.hpp"
+#include "filter/grayscale.hpp"
 
 int main(int argc, char** argv) {
     if (argc == 1) {
@@ -82,6 +83,8 @@ int main(int argc, char** argv) {
                 return 1;
             }
             filter_sequence.emplace_back(new Crop(width, height));
+        } else if (filter_name == "-gs") {
+            filter_sequence.emplace_back(new Grayscale());
         }
     }
 
