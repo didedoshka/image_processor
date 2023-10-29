@@ -3,5 +3,6 @@
 
 class Filter {
 public:
-    Image operator()(const Image& image);
+    virtual Image operator()(const Image& image);
 };
+
