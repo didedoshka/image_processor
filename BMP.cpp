@@ -9,7 +9,7 @@
 #include "pixel.hpp"
 
 Image::SizeType BMP::GetRowSize(uint16_t bits_per_pixel, uint32_t bitmap_width) {
-    return (bits_per_pixel * bitmap_width + 31) / 32 * 4;
+    return (static_cast<Image::SizeType>(bits_per_pixel) * static_cast<Image::SizeType>(bitmap_width) + 31) / 32 * 4;
 }
 
 BMP::BMP(const std::string& path) : path_(path) {
@@ -75,8 +75,8 @@ Image BMP::GetImage() const {
     for (Image::SizeType row = 0; row < image.GetHeight(); row++) {
         for (Image::SizeType column = 0; column < image.GetWidth(); ++column) {
             image.At(image.GetHeight() - row - 1, column) =
-                Pixel(bitmap.get()[row * row_size + column * 3 + 2],
-                            bitmap.get()[row * row_size + column * 3 + 1], bitmap.get()[row * row_size + column * 3]);
+                Pixel(bitmap.get()[row * row_size + column * 3 + 2], bitmap.get()[row * row_size + column * 3 + 1],
+                      bitmap.get()[row * row_size + column * 3]);
         }
     }
     return image;
@@ -100,7 +100,6 @@ void BMP::Save(const Image& image) {
             bitmap.get()[row * row_size + column * 3] = Pixel::ChannelToUInt8T(current.GetBlue());
         }
     }
-
 
     std::ofstream output(path_, std::ios::binary);
     output.write(reinterpret_cast<char*>(&bmp_header), sizeof(bmp_header));

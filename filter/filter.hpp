@@ -6,4 +6,3 @@ public:
     virtual Image operator()(const Image& image) = 0;
     virtual ~Filter() = default;
 };
-

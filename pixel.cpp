@@ -2,7 +2,10 @@
 #include <cmath>
 #include <cstdint>
 
-Pixel::Pixel() : red_(static_cast<Pixel::Channel>(0)), green_(static_cast<Pixel::Channel>(0)), blue_(static_cast<Pixel::Channel>(0)) {
+Pixel::Pixel()
+    : red_(static_cast<Pixel::Channel>(0)),
+      green_(static_cast<Pixel::Channel>(0)),
+      blue_(static_cast<Pixel::Channel>(0)) {
 }
 
 Pixel::Pixel(Pixel::Channel red, Pixel::Channel green, Pixel::Channel blue) {
@@ -41,7 +44,8 @@ Pixel::Channel Pixel::GetBlue() const {
 }
 
 uint8_t Pixel::ChannelToUInt8T(Pixel::Channel brightness) {
-    return static_cast<uint8_t>(std::round(std::max(std::min(brightness, static_cast<Pixel::Channel>(1)), static_cast<Pixel::Channel>(0)) * UINT8_MAX));
+    return static_cast<uint8_t>(std::round(
+        std::max(std::min(brightness, static_cast<Pixel::Channel>(1)), static_cast<Pixel::Channel>(0)) * UINT8_MAX));
 }
 
 std::ostream& operator<<(std::ostream& os, const Pixel& pixel) {

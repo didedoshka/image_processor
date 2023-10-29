@@ -1,6 +1,7 @@
 #include "image.hpp"
 
-Image::Image(Image::SizeType width, Image::SizeType height) : width_(width), height_(height), pixels_(width_ * height_) {
+Image::Image(Image::SizeType width, Image::SizeType height)
+    : width_(width), height_(height), pixels_(width_ * height_) {
 }
 
 const Image::SizeType Image::GetWidth() const {
