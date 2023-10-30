@@ -96,7 +96,9 @@ int main(int argc, char** argv) {
                 std::cout << "Error parsing parameter sigma for filter Gaussian Blur. Aborting." << '\n';
                 return 1;
             }
-            filter_sequence.emplace_back(new GaussianBlur(sigma));
+            // это мне тоже не нравится
+            filter_sequence.emplace_back(new GaussianBlurHorizontal(sigma));
+            filter_sequence.emplace_back(new GaussianBlurVertical(sigma));
         } else if (filter_name == "-edge") {
             Pixel::Channel threshold = 0;
             arguments >> threshold;

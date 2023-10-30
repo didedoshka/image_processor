@@ -1,6 +1,10 @@
 #include "apply_matrix.hpp"
 
-class GaussianBlur : public virtual ApplyMatrix {
+class GaussianBlurHorizontal : public virtual ApplyMatrix {
 public:
-    explicit GaussianBlur(Pixel::Channel sigma);
+    explicit GaussianBlurHorizontal(Pixel::Channel sigma);
+};
+class GaussianBlurVertical : public virtual ApplyMatrix {
+public:
+    explicit GaussianBlurVertical(Pixel::Channel sigma);
 };
