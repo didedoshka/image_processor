@@ -2,7 +2,7 @@
 
 #include "change_pixels.hpp"
 
-class Grayscale : public virtual ChangePixels {
+class Grayscale : public ChangePixels {
 public:
     Grayscale();
 

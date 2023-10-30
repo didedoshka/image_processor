@@ -3,7 +3,7 @@
 #include "filter.hpp"
 #include <functional>
 
-class ChangePixels : public virtual Filter {
+class ChangePixels : public Filter {
 public:
     Image operator()(const Image& image) override;
 

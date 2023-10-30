@@ -3,7 +3,7 @@
 #include <vector>
 #include "filter.hpp"
 
-class ApplyMatrix : public virtual Filter {
+class ApplyMatrix : public Filter {
 public:
     struct MatrixElement {
         Image::SizeType row_delta;

@@ -1,6 +1,6 @@
 #include "change_pixels.hpp"
 
-class Negative : public virtual ChangePixels {
+class Negative : public ChangePixels {
 public:
     Negative();
 };

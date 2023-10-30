@@ -2,7 +2,7 @@
 
 #include "filter.hpp"
 
-class Crop : public virtual Filter {
+class Crop : public Filter {
 public:
     Crop(Image::SizeType width, Image::SizeType height);
     Image operator()(const Image& image) override;

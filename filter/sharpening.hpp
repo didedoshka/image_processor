@@ -1,6 +1,6 @@
 #include "apply_matrix.hpp"
 
-class Sharpening : public virtual ApplyMatrix {
+class Sharpening : public ApplyMatrix {
 public:
     Sharpening();
 };
