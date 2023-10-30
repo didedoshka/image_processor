@@ -20,15 +20,15 @@ Pixel::Pixel(uint8_t red, uint8_t green, uint8_t blue)
       blue_(static_cast<Pixel::Channel>(blue) / UINT8_MAX) {
 }
 void Pixel::SetRed(Pixel::Channel red) {
-    red_ = std::min(static_cast<Pixel::Channel>(1), std::max(static_cast<Pixel::Channel>(0), red));
+    red_ = std::clamp(red, static_cast<Channel>(0.0), static_cast<Channel>(1.0));
 }
 
 void Pixel::SetGreen(Pixel::Channel green) {
-    green_ = std::min(static_cast<Pixel::Channel>(1), std::max(static_cast<Pixel::Channel>(0), green));
+    green_ = std::clamp(green, static_cast<Channel>(0.0), static_cast<Channel>(1.0));
 }
 
 void Pixel::SetBlue(Pixel::Channel blue) {
-    blue_ = std::min(static_cast<Pixel::Channel>(1), std::max(static_cast<Pixel::Channel>(0), blue));
+    blue_ = std::clamp(blue, 0.0f, 1.0f);
 }
 
 Pixel::Channel Pixel::GetRed() const {
@@ -44,8 +44,7 @@ Pixel::Channel Pixel::GetBlue() const {
 }
 
 uint8_t Pixel::ChannelToUInt8T(Pixel::Channel brightness) {
-    return static_cast<uint8_t>(std::round(
-        std::max(std::min(brightness, static_cast<Pixel::Channel>(1)), static_cast<Pixel::Channel>(0)) * UINT8_MAX));
+    return static_cast<uint8_t>(std::round(brightness * UINT8_MAX));
 }
 
 std::ostream& operator<<(std::ostream& os, const Pixel& pixel) {
