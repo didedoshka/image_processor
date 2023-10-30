@@ -9,7 +9,10 @@
 #include "pixel.hpp"
 
 Image::SizeType BMP::GetRowSize(uint16_t bits_per_pixel, uint32_t bitmap_width) {
-    return (static_cast<Image::SizeType>(bits_per_pixel) * static_cast<Image::SizeType>(bitmap_width) + 31) / 32 * 4;
+    const Image::SizeType four_bytes = 32;
+    return (static_cast<Image::SizeType>(bits_per_pixel) * static_cast<Image::SizeType>(bitmap_width) +
+            (four_bytes - 1)) /
+           four_bytes * 4;
 }
 
 BMP::BMP(const std::string& path) : path_(path) {
@@ -35,7 +38,7 @@ Image BMP::GetImage() const {
         throw std::runtime_error{"Input file is not BMP."};
     }
 
-    if (bmp_header.bitmap_offset != 54) {
+    if (bmp_header.bitmap_offset != SUPPORTED_BITMAP_OFFSET) {
         throw std::runtime_error{"Input file uses wrong Bitmap file header or DIB header."};
     }
 
@@ -46,19 +49,20 @@ Image BMP::GetImage() const {
         throw std::runtime_error{"Input file is too small: BITMAPINFOHEADER dosn't fit."};
     }
 
-    if (bitmap_info_header.header_size != 40) {
+    if (bitmap_info_header.header_size != SUPPORTED_HEADER_SIZE) {
         throw std::runtime_error("DIB header in input BMP file is not BITMAPINFOHEADER.");
     }
     if (bitmap_info_header.color_planes_number != 1) {
         throw std::runtime_error("The amount of color planes does not equal one.");
     }
-    if (bitmap_info_header.bits_per_pixel != 24) {
+    if (bitmap_info_header.bits_per_pixel != SUPPORTED_BITS_PER_PIXEL) {
         throw std::runtime_error("Image is not 24 bits per pixel.");
     }
     if (bitmap_info_header.compression != 0) {
         throw std::runtime_error("Image is compressed.");
     }
-    if (bitmap_info_header.colors_in_the_palette != 0 && bitmap_info_header.colors_in_the_palette != (1 << 24)) {
+    if (bitmap_info_header.colors_in_the_palette != 0 &&
+        bitmap_info_header.colors_in_the_palette != (1 << bitmap_info_header.bits_per_pixel)) {
         throw std::runtime_error("There are not 2^24 colors in the pallete.");
     }
 
