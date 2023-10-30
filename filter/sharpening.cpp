@@ -1,6 +1,8 @@
 #include "sharpening.hpp"
+#include "apply_matrix.hpp"
 
-Sharpening::Sharpening() {
-    const Pixel::Channel central = 5;
-    matrix_ = {{0, -1, -1}, {-1, 0, -1}, {0, 0, central}, {1, 0, -1}, {0, 1, -1}};
+const Pixel::Channel Sharpening::CENTRAL = 5;
+
+Sharpening::Sharpening()
+    : ApplyMatrix({{0, -1, -1}, {-1, 0, -1}, {0, 0, Sharpening::CENTRAL}, {1, 0, -1}, {0, 1, -1}}) {
 }

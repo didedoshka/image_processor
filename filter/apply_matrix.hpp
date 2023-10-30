@@ -12,12 +12,11 @@ public:
     };
 
     using Matrix = std::vector<MatrixElement>;
+    explicit ApplyMatrix(const Matrix& matrix);
     Image operator()(const Image& image) override;
 
 private:
     std::pair<Image::SizeType, Image::SizeType> GetNearest(Image::SizeType row, Image::SizeType column,
                                                            Image::SizeType width, Image::SizeType height);
-
-protected:
     Matrix matrix_;
 };

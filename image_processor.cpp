@@ -96,9 +96,7 @@ int main(int argc, char** argv) {
                 std::cout << "Error parsing parameter sigma for filter Gaussian Blur. Aborting." << '\n';
                 return 1;
             }
-            // это мне тоже не нравится
-            filter_sequence.emplace_back(new GaussianBlurHorizontal(sigma));
-            filter_sequence.emplace_back(new GaussianBlurVertical(sigma));
+            filter_sequence.emplace_back(new GaussianBlur(sigma));
         } else if (filter_name == "-edge") {
             Pixel::Channel threshold = 0;
             arguments >> threshold;
@@ -106,10 +104,7 @@ int main(int argc, char** argv) {
                 std::cout << "Error parsing parameter threshold for filter Edge Detection. Aborting." << '\n';
                 return 1;
             }
-            // мне это не нравится, я хочу по-другому, но не знаю как
-            filter_sequence.emplace_back(new Grayscale());
-            filter_sequence.emplace_back(new ApplyEdgeDetectionMatrix());
-            filter_sequence.emplace_back(new ChangeEdgeDetectionPixels(threshold));
+            filter_sequence.emplace_back(new EdgeDetection(threshold));
         } else {
             std::cout << "Unknown argument: " << filter_name << ". Aborting." << '\n';
         }
@@ -119,7 +114,7 @@ int main(int argc, char** argv) {
         try {
             image = (*filter)(image);
         } catch (const std::exception& ex) {
-            std::cout << "While applying a filter, an error occured: " << ex.what() << "Aborting." << '\n';
+            std::cout << "while applying a filter, an error occured: " << ex.what() << "aborting." << '\n';
             return 1;
         }
     }

@@ -2,6 +2,9 @@
 #include <iostream>
 #include <stdexcept>
 
+ApplyMatrix::ApplyMatrix(const Matrix& matrix) : matrix_(matrix) {
+}
+
 std::pair<Image::SizeType, Image::SizeType> ApplyMatrix::GetNearest(Image::SizeType row, Image::SizeType column,
                                                                     Image::SizeType width, Image::SizeType height) {
     Image::SizeType result_row = row;

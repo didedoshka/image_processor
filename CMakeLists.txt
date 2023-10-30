@@ -13,6 +13,7 @@ add_executable(
     image.cpp
     BMP.cpp
     image_processor.cpp
+    filter/combined_filter.cpp
     filter/crop.cpp
     filter/change_pixels.cpp
     filter/grayscale.cpp

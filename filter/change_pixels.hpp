@@ -5,8 +5,9 @@
 
 class ChangePixels : public Filter {
 public:
+    explicit ChangePixels(std::function<Pixel(const Pixel&)> change_pixel);
     Image operator()(const Image& image) override;
 
-protected:
+private:
     std::function<Pixel(Pixel)> change_pixel_;
 };

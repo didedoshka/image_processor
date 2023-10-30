@@ -1,11 +1,9 @@
-#include "apply_matrix.hpp"
+#include "combined_filter.hpp"
 
-class GaussianBlurHorizontal : public virtual ApplyMatrix {
+class GaussianBlur : public CombinedFilter {
 public:
-    explicit GaussianBlurHorizontal(Pixel::Channel sigma);
-};
+    explicit GaussianBlur(Pixel::Channel sigma);
 
-class GaussianBlurVertical : public virtual ApplyMatrix {
-public:
-    explicit GaussianBlurVertical(Pixel::Channel sigma);
+private:
+    std::vector<std::unique_ptr<Filter>> GetFilters(Pixel::Channel sigma);
 };
