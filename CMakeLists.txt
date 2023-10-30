@@ -20,4 +20,5 @@ add_executable(
     filter/apply_matrix.cpp
     filter/sharpening.cpp
     filter/gaussian_blur.cpp
+    filter/edge_detection.cpp
 )

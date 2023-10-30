@@ -1,4 +1,5 @@
-#include "filter.hpp"
+#pragma once
+
 #include "apply_matrix.hpp"
 #include "change_pixels.hpp"
 
@@ -8,4 +9,12 @@
 // и потом change_pixels с функцией, которая перекрашивает в то как надо в зависимости от трешхолд можете подсказать,
 // что делать, пожалуйста
 
-class EdgeDetection : public virtual Filter {};
+class ApplyEdgeDetectionMatrix : public virtual ApplyMatrix {
+public:
+    ApplyEdgeDetectionMatrix();
+};
+
+class ChangeEdgeDetectionPixels : public virtual ChangePixels {
+public:
+    explicit ChangeEdgeDetectionPixels(Pixel::Channel threshold);
+};

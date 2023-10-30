@@ -13,6 +13,7 @@
 #include "filter/negative.hpp"
 #include "filter/sharpening.hpp"
 #include "filter/gaussian_blur.hpp"
+#include "filter/edge_detection.hpp"
 
 int main(int argc, char** argv) {
     if (argc == 1) {
@@ -96,6 +97,19 @@ int main(int argc, char** argv) {
                 return 1;
             }
             filter_sequence.emplace_back(new GaussianBlur(sigma));
+        } else if (filter_name == "-edge") {
+            Pixel::Channel threshold = 0;
+            arguments >> threshold;
+            if (arguments.fail()) {
+                std::cout << "Error parsing parameter threshold for filter Edge Detection. Aborting." << '\n';
+                return 1;
+            }
+            // мне это не нравится, я хочу по-другому, но не знаю как
+            filter_sequence.emplace_back(new Grayscale());
+            filter_sequence.emplace_back(new ApplyEdgeDetectionMatrix());
+            filter_sequence.emplace_back(new ChangeEdgeDetectionPixels(threshold));
+        } else {
+            std::cout << "Unknown argument: " << filter_name << ". Aborting." << '\n';
         }
     }
 
