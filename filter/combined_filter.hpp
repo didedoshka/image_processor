@@ -1,6 +1,7 @@
 #pragma once
 
 #include "filter.hpp"
+#include <memory>
 
 class CombinedFilter : public Filter {
 public:
