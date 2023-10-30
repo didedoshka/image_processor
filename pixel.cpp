@@ -20,15 +20,15 @@ Pixel::Pixel(uint8_t red, uint8_t green, uint8_t blue)
       blue_(static_cast<Pixel::Channel>(blue) / UINT8_MAX) {
 }
 void Pixel::SetRed(Pixel::Channel red) {
-    red_ = std::clamp(red, static_cast<Channel>(0.0), static_cast<Channel>(1.0));
+    red_ = std::clamp(red, Channel{0.0}, Channel{1.0});
 }
 
 void Pixel::SetGreen(Pixel::Channel green) {
-    green_ = std::clamp(green, static_cast<Channel>(0.0), static_cast<Channel>(1.0));
+    green_ = std::clamp(green, Channel{0.0}, Channel{1.0});
 }
 
 void Pixel::SetBlue(Pixel::Channel blue) {
-    blue_ = std::clamp(blue, 0.0f, 1.0f);
+    blue_ = std::clamp(blue, Channel{0.0}, Channel{1.0});
 }
 
 Pixel::Channel Pixel::GetRed() const {
