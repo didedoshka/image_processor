@@ -1,19 +1,22 @@
 #pragma once
 
+#include <climits>
 #include <cstdint>
+#include <fstream>
 #include <string>
 #include "image.hpp"
 
+const uint16_t SUPPORTED_MAGIC = ('M' << CHAR_BIT) + 'B';
 const uint32_t SUPPORTED_BITMAP_OFFSET = 54;
 const uint32_t SUPPORTED_HEADER_SIZE = 40;
 const uint32_t SUPPORTED_BITS_PER_PIXEL = 24;
 
 struct BMPHeader {
-    uint8_t magic[2]{'B', 'M'};
+    uint16_t magic{('M' << CHAR_BIT) + 'B'};
     uint32_t file_size{};
-    uint8_t depends_on_creator[4]{};
+    uint32_t depends_on_creator{};
     uint32_t bitmap_offset{SUPPORTED_BITMAP_OFFSET};
-} __attribute__((packed));
+};
 
 struct BitmapInfoHeader {
     uint32_t header_size{SUPPORTED_HEADER_SIZE};
@@ -37,5 +40,8 @@ public:
 
 private:
     std::string path_;
+    static void ReadNumber(std::ifstream& ifs, auto& number, size_t size);
+    static void WriteNumber(std::ofstream& ofs, auto& number, size_t size);
+
     static Image::SizeType GetRowSize(uint16_t bits_per_pixel, uint32_t bitmap_width);
 };
