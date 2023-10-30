@@ -5,7 +5,7 @@
 #include <iostream>
 
 TEST_CASE("Pixel") {
-    Pixel pixel(static_cast<uint8_t>(204), static_cast<uint8_t>(204), static_cast<uint8_t>(102));
+    Pixel pixel(uint8_t(204), uint8_t(204), uint8_t(102));
 
     REQUIRE(pixel.GetRed() - 0.8 < 0.0001);
     REQUIRE(pixel.GetGreen() - 0.8 < 0.0001);
