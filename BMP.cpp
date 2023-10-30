@@ -67,7 +67,7 @@ Image BMP::GetImage() const {
     }
 
     std::streamsize bitmap_size = bmp_header.file_size - bmp_header.bitmap_offset;
-    std::unique_ptr<uint8_t> bitmap(new uint8_t[bitmap_size]);
+    std::unique_ptr<uint8_t[]> bitmap(new uint8_t[bitmap_size]);
 
     input.read(reinterpret_cast<char*>(bitmap.get()), bitmap_size);
     if (input.fail()) {
@@ -95,7 +95,7 @@ void BMP::Save(const Image& image) {
     bmp_header.file_size = (bmp_header.bitmap_offset + bitmap_info_header.bitmap_height * row_size);
 
     std::streamsize bitmap_size = bmp_header.file_size - bmp_header.bitmap_offset;
-    std::unique_ptr<uint8_t> bitmap(new uint8_t[bitmap_size]);
+    std::unique_ptr<uint8_t[]> bitmap(new uint8_t[bitmap_size]);
     for (Image::SizeType row = 0; row < image.GetHeight(); row++) {
         for (Image::SizeType column = 0; column < image.GetWidth(); ++column) {
             Pixel current = image.At(image.GetHeight() - row - 1, column);
